@@ -147,7 +147,8 @@ json.categories do
 end
 ```
 
-Gotchas: This is a proof-of-concept, thus some errors might pop up (no tests either!) :)
+## Gotchas
 
+* This is a proof-of-concept, thus some errors should be expected. There are no tests either.
 * The Regex used to ban the caches will not handle low IDs very well. The project I used this approach on uses MongoDB IDs (http://docs.mongodb.org/manual/reference/object-id/) so does not have this issue.
 * The Rails caching is pretty weak. Only the partials are cached in a fragment cache. I was not able to find a better way to build up the rendered_entities cache then by calling them from the template. Thus this needs to be executed whenever the template is rendered.
