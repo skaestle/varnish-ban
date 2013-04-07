@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   after_filter :set_rendered_entities_headers, :set_cache_headers
   attr_writer :expiration_time
 
+  # expiration_time for the cache, default is 1 day  
   def expiration_time
     @expiration_time ||= 1.day
   end
@@ -11,16 +12,19 @@ class ApplicationController < ActionController::Base
     @rendered_entities ||= {}
   end
 
+  # files the given entity under its class to the hash
   def add_rendered_entity(entity)
     return unless entity
 
-    key = entity.class.to_s.downcase.parameterize.pluralize
+    key = entity.class.to_s.varnish_ban_header_name
 
     self.rendered_entities[key] ||= []
     self.rendered_entities[key] << entity
   end
 
   private
+  
+  # uses the built up hash and outputs it as HTTP-Header
   def set_rendered_entities_headers
     self.rendered_entities.each do |key, entities|
       entity_ids = entities.map(&:id).map(&:to_s).join(',')

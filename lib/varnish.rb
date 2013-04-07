@@ -3,7 +3,7 @@ require 'net/telnet'
 # telnet client to varnish (https://github.com/russ/lacquer)
 class Varnish
   def self.ban_header(type, id)
-    header_name = type.downcase.parameterize.pluralize
+    header_name = type.varnish_ban_header_name
     send_command('ban obj.http.X-'+ header_name + ' ~ "' + id.to_s + '"')
   end
  
