@@ -1,3 +1,5 @@
+require 'ban_entity_from_varnish'
+
 class Article < ActiveRecord::Base
   include BanEntityFromVarnish
 

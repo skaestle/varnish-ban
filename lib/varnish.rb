@@ -1,5 +1,6 @@
 require 'net/telnet'
 
+# telnet client to varnish (https://github.com/russ/lacquer)
 class Varnish
   def self.ban_header(type, id)
     header_name = type.downcase.parameterize.pluralize

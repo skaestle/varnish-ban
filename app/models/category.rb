@@ -1,3 +1,5 @@
+require 'ban_entity_from_varnish'
+
 class Category < ActiveRecord::Base
   include BanEntityFromVarnish
   
