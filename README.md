@@ -18,9 +18,41 @@ This Rails project is a proof-of-concept to leverage varnish caching of dynamic 
 ## Seeing it work
 
 1.  curl --head http://localhost/categories/1/articles.json
+
     See the HTTP-Headers (X-Articles, X-Categories); See how Age counts up
 2.  Now change an article and see how the changes propagate through the varnish cache
+
     curl will now show the Age reset, and of course you're gonna see the changes in the browser too
+    
+``` 
+curl --head http://localhost/categories/1/articles.json
+HTTP/1.1 200 OK 
+Cache-Control: max-age=86400, private
+X-Categories: 1
+X-Articles: 1,2,3,4,5,6
+Content-Type: application/json; charset=utf-8
+X-Ua-Compatible: IE=Edge
+Etag: "408fb88f2f65b4974948f2dd9a039839"
+X-Request-Id: ae8ee176dc6a636772f5d0fdd20daf0b
+X-Runtime: 0.024485
+Server: WEBrick/1.3.1 (Ruby/1.9.3/2012-04-20)
+Content-Length: 624
+Accept-Ranges: bytes
+Date: Sun, 07 Apr 2013 23:30:54 GMT
+X-Varnish: 412126710 412126705
+Age: 631
+Via: 1.1 varnish
+Connection: keep-alive
+```
+
+    
+Resources that work:
+
+* http://localhost/categories/1/articles.json (having articles 1-6)
+* http://localhost/categories/2/articles.json (having articles 1, 6-10)
+* http://localhost/articles/1.json (a single article)
+
+They all get banned according to the article that as changed
 
 ## How it is accomplished
 
