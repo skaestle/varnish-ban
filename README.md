@@ -5,22 +5,22 @@ This Rails project is a proof-of-concept to leverage varnish caching of dynamic 
 
 ## Installing varnish
 
-1. Install varnish via homebrew
-2. Start it: sudo /usr/local/sbin/varnishd -a 127.0.0.1:80 -b 127.0.0.1:3000 -s file,/tmp,500M -T 0.0.0.0:6082
+1.  Install varnish via homebrew
+2.  Start it: sudo /usr/local/sbin/varnishd -a 127.0.0.1:80 -b 127.0.0.1:3000 -s file,/tmp,500M -T 0.0.0.0:6082
 
 ## Setting up the project
 
-1. checkout the repository
-2. bundle install
-3. rake db:setup
-4. rails s
+1.  checkout the repository
+2.  bundle install
+3.  rake db:setup
+4.  rails s
 
 ## Seeing it work
 
-1. curl --head http://localhost/categories/1/articles.json
-   See the HTTP-Headers (X-Articles, X-Categories); See how Age counts up
-2. Now change an article and see how the changes propagate through the varnish cache
-   curl will now show the Age reset, and of course you're gonna see the changes in the browser too
+1.  curl --head http://localhost/categories/1/articles.json
+    See the HTTP-Headers (X-Articles, X-Categories); See how Age counts up
+2.  Now change an article and see how the changes propagate through the varnish cache
+    curl will now show the Age reset, and of course you're gonna see the changes in the browser too
 
 ## How it is accomplished
 
