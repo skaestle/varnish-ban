@@ -7,14 +7,15 @@ When an article is saved, an after_save hook calls the banning
 
 ``` ruby
 require 'ban_entity_from_varnish'
-
 class Article < ActiveRecord::Base
   include BanEntityFromVarnish
 
   attr_accessible :lead, :text, :title
   has_and_belongs_to_many :categories
 end
+```
 
+``` ruby
 require 'varnish'
 
 # module that adds an after_save hook which will ban 
