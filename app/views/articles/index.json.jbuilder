@@ -1,17 +1,13 @@
 json.categories do
-    controller.add_rendered_entity(@category)
+  controller.add_rendered_entity(@category)
 
-    json.id @category.id
-    json.name @category.name
+  json.partial! "categories/show", category: @category
 
-    json.articles do 
-        json.array! @articles do |article|
+  json.articles do 
+    json.array! @articles do |article|
+      controller.add_rendered_entity(article)
 
-            controller.add_rendered_entity(article)
-            json.id article.id
-            json.title article.title
-            json.lead article.lead
-            json.text article.text
-        end
+      json.partial! "articles/show", article: article
     end
+  end
 end

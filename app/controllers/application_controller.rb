@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  after_filter :set_rendered_entities_headers
+  after_filter :set_rendered_entities_headers, :set_cache_headers
   attr_writer :expiration_time
 
   def expiration_time
