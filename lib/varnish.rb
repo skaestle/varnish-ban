@@ -2,7 +2,6 @@ require 'net/telnet'
 
 class Varnish
   def self.ban_header(type, id)
-    puts "<<<<<<<<<<<< #{type}, #{id}"
     header_name = type.downcase.parameterize.pluralize
     send_command('ban obj.http.X-'+ header_name + ' ~ "' + id.to_s + '"')
   end
