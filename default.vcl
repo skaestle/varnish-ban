@@ -16,8 +16,8 @@ sub vcl_deliver {
   set resp.http.Cache-Control = "max-age=0, private";
 
   # unset the headers, thus remove them from the response the client sees
-  unset resp.http.X-Articles;
-  unset resp.http.X-Varnish-Cache;
+  # unset resp.http.X-Articles;
+  # unset resp.http.X-Category;
 
   # Just for debugging: return cache hit/miss
   if (obj.hits > 0) {

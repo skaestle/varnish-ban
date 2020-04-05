@@ -50,9 +50,9 @@ Connection: keep-alive
 
 Resources that work:
 
-* http://localhost/categories/1/articles.json (having articles 1-6)
-* http://localhost/categories/2/articles.json (having articles 1, 6-10)
-* http://localhost/articles/1.json (a single article)
+* http://localhost/categories/1/articles.json
+* http://localhost/categories/2/articles.json
+* http://localhost/articles/1.json
 
 They all get banned according to the article that as changed
 
