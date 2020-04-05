@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
+gem 'jbuilder'
+gem 'net-telnet'
 gem 'rails', '~> 4'
 gem 'sqlite3', '~> 1.3.6'
-gem 'net-telnet'
-gem 'jbuilder'
 
 group :assets do
-  gem 'sass-rails'
   gem 'coffee-rails'
+  gem 'sass-rails'
   gem 'uglifier'
 end
 
