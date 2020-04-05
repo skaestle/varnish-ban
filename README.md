@@ -6,7 +6,9 @@ This Rails project is a proof-of-concept to leverage varnish caching of dynamic 
 ## Installing varnish
 
 1.  Install varnish via homebrew
-2.  Start it: sudo /usr/local/sbin/varnishd -a 127.0.0.1:80 -b 127.0.0.1:3000 -s file,/tmp,500M -T 0.0.0.0:6082
+2.  Start it: sudo /usr/local/sbin/varnishd -f /Users/sascha/projects/varnish-ban/default.vcl -a 127.0.0.1:80 -s file,/tmp,500M -T 0.0.0.0:6082 -S none
+
+Please be aware that this configuration is not meant for production. With this configuration varnish will allow anyone with access to `localhost` to telnet into it without any authentication.
 
 ## Setting up the project
 
@@ -23,10 +25,10 @@ This Rails project is a proof-of-concept to leverage varnish caching of dynamic 
 2.  Now change an article and see how the changes propagate through the varnish cache
 
     curl will now show the Age reset, and of course you're gonna see the changes in the browser too
-    
-``` 
+
+```
 curl --head http://localhost/categories/1/articles.json
-HTTP/1.1 200 OK 
+HTTP/1.1 200 OK
 Cache-Control: max-age=86400, private
 X-Categories: 1
 X-Articles: 1,2,3,4,5,6
@@ -45,12 +47,12 @@ Via: 1.1 varnish
 Connection: keep-alive
 ```
 
-    
+
 Resources that work:
 
-* http://localhost/categories/1/articles.json (having articles 1-6)
-* http://localhost/categories/2/articles.json (having articles 1, 6-10)
-* http://localhost/articles/1.json (a single article)
+* http://localhost/categories/1/articles.json
+* http://localhost/categories/2/articles.json
+* http://localhost/articles/1.json
 
 They all get banned according to the article that as changed
 
@@ -62,7 +64,6 @@ require 'ban_entity_from_varnish'
 class Article < ActiveRecord::Base
   include BanEntityFromVarnish
 
-  attr_accessible :lead, :text, :title
   has_and_belongs_to_many :categories
 end
 ```
@@ -70,11 +71,11 @@ end
 ``` ruby
 require 'varnish'
 
-# module that adds an after_save hook which will ban 
+# module that adds an after_save hook which will ban
 # the entity from varnish
 module BanEntityFromVarnish
   extend ActiveSupport::Concern
-  
+
   included do
     after_save :queue_url_refresh
 
@@ -93,7 +94,7 @@ class ApplicationController < ActionController::Base
   after_filter :set_rendered_entities_headers, :set_cache_headers
   attr_writer :expiration_time
 
-  # expiration_time for the cache, default is 1 day  
+  # expiration_time for the cache, default is 1 day
   def expiration_time
     @expiration_time ||= 1.day
   end
@@ -113,7 +114,7 @@ class ApplicationController < ActionController::Base
   end
 
   private
-  
+
   # uses the built up hash and outputs it as HTTP-Header
   def set_rendered_entities_headers
     self.rendered_entities.each do |key, entities|
@@ -131,14 +132,14 @@ end
 The method #add_rendered_entity(entity) must be called from the templates
 ``` ruby
 json.categories do
-  # adds the category to the rendered entity collection 
+  # adds the category to the rendered entity collection
   controller.add_rendered_entity(@category)
 
   json.partial! "categories/show", category: @category
 
-  json.articles do 
+  json.articles do
     json.array! @articles do |article|
-      # adds the article to the rendered entity collection 
+      # adds the article to the rendered entity collection
       controller.add_rendered_entity(article)
 
       json.partial! "articles/show", article: article
@@ -149,6 +150,6 @@ end
 
 ## Gotchas
 
-* This is a proof-of-concept, thus some errors should be expected. There are no tests either.
+* This is a proof-of-concept, thus some errors should be expected. There are no tests.
 * The Regex used to ban the caches will not handle low IDs very well. The project I used this approach on uses MongoDB IDs (http://docs.mongodb.org/manual/reference/object-id/) so does not have this issue.
 * The Rails caching is pretty weak. Only the partials are cached in a fragment cache. I was not able to find a better way to build up the rendered_entities cache then by calling them from the template. Thus this needs to be executed whenever the template is rendered.
