@@ -1,8 +1,10 @@
-categories = Category.create([{name: 'science'}, {name: 'politics'}])
+# frozen_string_literal: true
+
+categories = Category.create([{ name: 'science' }, { name: 'politics' }])
 
 categories.each do |cat|
   5.times do
-    cat.articles << Article.create( [{title: "title", lead: "lead", text: "text"}] )
+    cat.articles << Article.create([{ title: 'title', lead: 'lead', text: 'text' }])
   end
 end
 
