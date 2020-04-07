@@ -10,6 +10,11 @@ This Rails project is a proof-of-concept to leverage varnish caching of dynamic 
 
 Please be aware that this configuration is not meant for production. With this configuration varnish will allow anyone with access to `localhost` to telnet into it without any authentication.
 
+## Useful varnish commands
+
+- `varnishadm`
+- `varnishlog`
+
 ## Setting up the project
 
 1.  checkout the repository
